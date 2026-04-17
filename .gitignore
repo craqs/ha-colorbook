@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Dev data (local testing only — never commit real generated images or DB)
+devdata/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Secrets
+.env
+.env.*
