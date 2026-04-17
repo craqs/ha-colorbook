@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#6f5af0">
   <title>Colorbook</title>
   <link rel="manifest" href="{{ url_for('static', filename='manifest.webmanifest') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v={{ cb }}">
 </head>
 <body
   data-lang="{{ language }}"
@@ -23,15 +23,14 @@
   <main class="container">
     <section class="card input-card">
       <label for="topic" class="field-label" data-i18n="topicLabel">Coloring page topic</label>
-      <input
+      <textarea
         id="topic"
-        type="text"
         autocomplete="off"
-        inputmode="text"
         data-i18n-placeholder="topicPlaceholder"
         placeholder="e.g. a fox running in the woods"
-        maxlength="200"
-      >
+        maxlength="400"
+        rows="2"
+      ></textarea>
 
       <div class="controls">
         <button type="button" class="btn btn-ghost" id="btn-random">
@@ -126,6 +125,6 @@
 
   <div class="toast" id="toast" hidden></div>
 
-  <script src="{{ url_for('static', filename='app.js') }}"></script>
+  <script src="{{ url_for('static', filename='app.js') }}?v={{ cb }}"></script>
 </body>
 </html>

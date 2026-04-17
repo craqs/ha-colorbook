@@ -112,6 +112,11 @@
   const api = (path) => path.startsWith("/") ? "." + path : path;
   const $ = (id) => document.getElementById(id);
 
+  function autoGrow(ta) {
+    ta.style.height = "auto";
+    ta.style.height = Math.min(ta.scrollHeight, 160) + "px";
+  }
+
   const el = {
     topic:             $("topic"),
     btnRandom:         $("btn-random"),
@@ -224,6 +229,7 @@
       el.previewImage.src = api(item.image_url);
       el.promptBox.textContent = item.full_prompt;
       el.topic.value = item.topic;
+      autoGrow(el.topic);
       hideRefineRow();
 
       if (autoAccept) {
@@ -271,6 +277,7 @@
     try {
       const { topic } = await apiCall("/api/random-topic");
       el.topic.value = topic;
+      autoGrow(el.topic);
       el.topic.focus();
     } catch (err) {
       toast(err.message, "error");
@@ -368,8 +375,9 @@
   // ---------------------------------------------------------------------------
   // Event wiring
   // ---------------------------------------------------------------------------
+  el.topic.addEventListener("input", () => autoGrow(el.topic));
   el.btnGenerate.addEventListener("click", () => generate());
-  el.topic.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); generate(); } });
+  el.topic.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); generate(); } });
   el.btnRandom.addEventListener("click", fetchRandomTopic);
   el.btnPrint.addEventListener("click", () => { if (state.current) printItem(state.current.id); });
   el.btnRegen.addEventListener("click", () => {
@@ -400,5 +408,6 @@
   // Init
   // ---------------------------------------------------------------------------
   applyTranslations();
+  autoGrow(el.topic);
   refreshGallery();
 })();

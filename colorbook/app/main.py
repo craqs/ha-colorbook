@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import logging
 from pathlib import Path
 
@@ -15,6 +16,16 @@ from .pdf import png_to_pdf
 from .prompt import build_prompt
 
 log = logging.getLogger(__name__)
+
+# Content-hash cache-buster so browsers always pick up new JS/CSS after a
+# container rebuild, even when the browser has a 304-cached copy.
+_STATIC = Path(__file__).parent / "static"
+try:
+    _CB = hashlib.md5(
+        (_STATIC / "app.js").read_bytes() + (_STATIC / "style.css").read_bytes()
+    ).hexdigest()[:10]
+except Exception:
+    _CB = "0"
 
 
 class IngressPrefixMiddleware:
@@ -54,6 +65,7 @@ def create_app() -> Flask:
             auto_accept_default=SETTINGS.auto_accept_default,
             paper_size=SETTINGS.paper_size,
             language=SETTINGS.language,
+            cb=_CB,
         )
 
     @app.get("/healthz")
