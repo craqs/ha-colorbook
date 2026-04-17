@@ -53,11 +53,21 @@ def create_app() -> Flask:
             "index.html",
             auto_accept_default=SETTINGS.auto_accept_default,
             paper_size=SETTINGS.paper_size,
+            language=SETTINGS.language,
         )
 
     @app.get("/healthz")
     def healthz():
         return {"ok": True}
+
+    @app.get("/api/config")
+    def api_config():
+        return jsonify({
+            "auto_accept_default": SETTINGS.auto_accept_default,
+            "paper_size": SETTINGS.paper_size,
+            "image_model": SETTINGS.openai_image_model,
+            "language": SETTINGS.language,
+        })
 
     @app.get("/api/printer-discover")
     def api_printer_discover():
@@ -77,14 +87,6 @@ def create_app() -> Flask:
             })
         return jsonify({"printers": result})
 
-    @app.get("/api/config")
-    def api_config():
-        return jsonify({
-            "auto_accept_default": SETTINGS.auto_accept_default,
-            "paper_size": SETTINGS.paper_size,
-            "image_model": SETTINGS.openai_image_model,
-        })
-
     # --- Generation --------------------------------------------------------
 
     @app.post("/api/generate")
@@ -95,7 +97,7 @@ def create_app() -> Flask:
         parent_id = (data.get("parent_id") or "").strip() or None
 
         if not topic:
-            return jsonify({"error": "Podaj temat kolorowanki."}), 400
+            return jsonify({"error": "Please enter a topic."}), 400
 
         try:
             full_prompt = build_prompt(topic, refinement)
@@ -106,9 +108,9 @@ def create_app() -> Flask:
             png_bytes = openai_client.generate_image(full_prompt)
         except RuntimeError as exc:
             return jsonify({"error": str(exc)}), 500
-        except Exception as exc:  # pragma: no cover — external API
+        except Exception as exc:
             log.exception("Image generation failed")
-            return jsonify({"error": f"Nie udało się wygenerować obrazka: {exc}"}), 502
+            return jsonify({"error": f"Image generation failed: {exc}"}), 502
 
         item = history.save_generation(
             topic=topic,
@@ -125,12 +127,12 @@ def create_app() -> Flask:
     @app.get("/api/random-topic")
     def api_random_topic():
         try:
-            topic = openai_client.random_topic()
+            topic = openai_client.random_topic(language=SETTINGS.language)
         except RuntimeError as exc:
             return jsonify({"error": str(exc)}), 500
-        except Exception as exc:  # pragma: no cover
+        except Exception as exc:
             log.exception("Random topic failed")
-            return jsonify({"error": f"Nie udało się wylosować tematu: {exc}"}), 502
+            return jsonify({"error": f"Failed to generate random topic: {exc}"}), 502
         return jsonify({"topic": topic})
 
     # --- Printing ----------------------------------------------------------
@@ -140,23 +142,23 @@ def create_app() -> Flask:
         data = request.get_json(silent=True) or {}
         item_id = (data.get("id") or "").strip()
         if not item_id:
-            return jsonify({"error": "Brak identyfikatora obrazka."}), 400
+            return jsonify({"error": "Missing image ID."}), 400
         item = history.get(item_id)
         if item is None:
-            return jsonify({"error": "Nie znaleziono obrazka w historii."}), 404
+            return jsonify({"error": "Image not found in history."}), 404
 
         png_path: Path = history.image_path(item)
         if not png_path.exists():
-            return jsonify({"error": "Plik obrazka zniknął z dysku."}), 410
+            return jsonify({"error": "Image file is missing from disk."}), 410
 
         try:
             pdf_bytes = png_to_pdf(png_path.read_bytes(), SETTINGS.paper_size)  # type: ignore[arg-type]
-            result = submit_pdf(pdf_bytes, job_name=f"Kolorowanka: {item.topic}")
+            result = submit_pdf(pdf_bytes, job_name=f"Colorbook: {item.topic}")
         except RuntimeError as exc:
             return jsonify({"error": str(exc)}), 502
-        except Exception as exc:  # pragma: no cover
+        except Exception as exc:
             log.exception("Print failed")
-            return jsonify({"error": f"Nie udało się wydrukować: {exc}"}), 502
+            return jsonify({"error": f"Print failed: {exc}"}), 502
 
         history.mark_printed(item.id)
         return jsonify({
@@ -173,7 +175,7 @@ def create_app() -> Flask:
             limit = int(request.args.get("limit", 50))
             offset = int(request.args.get("offset", 0))
         except ValueError:
-            return jsonify({"error": "Parametry limit/offset muszą być liczbami."}), 400
+            return jsonify({"error": "limit/offset must be integers."}), 400
         items = history.list_items(limit=limit, offset=offset)
         payload = []
         for item in items:
@@ -196,7 +198,7 @@ def create_app() -> Flask:
     def api_history_delete(item_id: str):
         ok = history.delete(item_id)
         if not ok:
-            return jsonify({"error": "Nie znaleziono obrazka."}), 404
+            return jsonify({"error": "Image not found."}), 404
         return jsonify({"ok": True})
 
     return app

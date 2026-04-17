@@ -33,6 +33,7 @@ class Settings:
     printer_queue: str
     paper_size: str
     auto_accept_default: bool
+    language: str          # "en" (default) | "pl"
     data_dir: Path
 
     @property
@@ -46,13 +47,16 @@ class Settings:
 
 def load() -> Settings:
     # Resolve to an absolute path up-front: Flask's send_file treats relative
-    # paths as relative to app.root_path (the "app/" package dir), which would
-    # mismatch where history.py writes PNG files (relative to CWD).
+    # paths as relative to app.root_path (the "app/" package dir).
     data_dir = Path(_env("DATA_DIR", "/data")).expanduser().resolve()
     data_dir.mkdir(parents=True, exist_ok=True)
     (data_dir / "images").mkdir(parents=True, exist_ok=True)
 
     api_key = _env("OPENAI_API_KEY") or _env("OPENAI_TOKEN")
+
+    language = _env("APP_LANGUAGE", "en").strip().lower()
+    if language not in ("en", "pl"):
+        language = "en"
 
     return Settings(
         openai_api_key=api_key,
@@ -62,9 +66,10 @@ def load() -> Settings:
         image_quality=_env("IMAGE_QUALITY", "medium"),
         printer_host=_env("PRINTER_HOST"),
         printer_port=int(_env("PRINTER_PORT", "631") or "631"),
-        printer_queue=_env("PRINTER_QUEUE", "ipp/print").lstrip("/"),
+        printer_queue=_env("PRINTER_QUEUE", "").lstrip("/"),
         paper_size=_env("PAPER_SIZE", "A4"),
         auto_accept_default=_bool(_env("AUTO_ACCEPT_DEFAULT", "false")),
+        language=language,
         data_dir=data_dir,
     )
 

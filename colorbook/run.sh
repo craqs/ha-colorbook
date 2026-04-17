@@ -13,6 +13,7 @@ export IMAGE_QUALITY="$(bashio::config 'image_quality')"
 export AUTO_ACCEPT_DEFAULT="$(bashio::config 'auto_accept_default')"
 export OPENAI_IMAGE_MODEL="$(bashio::config 'openai_image_model')"
 export OPENAI_CHAT_MODEL="$(bashio::config 'openai_chat_model')"
+export APP_LANGUAGE="$(bashio::config 'language')"
 
 # Fall back to pre-provisioned OPENAI_TOKEN if openai_api_key option is empty
 if [ -z "${OPENAI_API_KEY}" ] && [ -n "${OPENAI_TOKEN:-}" ]; then
@@ -23,7 +24,7 @@ fi
 export DATA_DIR="/data"
 mkdir -p "${DATA_DIR}/images"
 
-bashio::log.info "Starting Kolorowanki on :8099"
+bashio::log.info "Starting Colorbook on :8099 (language: ${APP_LANGUAGE:-en})"
 
 exec gunicorn \
   --bind 0.0.0.0:8099 \
