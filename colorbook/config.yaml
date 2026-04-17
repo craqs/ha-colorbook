@@ -31,7 +31,7 @@ options:
   openai_chat_model: "gpt-4o-mini"
   language: "en"
 schema:
-  openai_api_key: "str?"
+  openai_api_key: "password?"
   printer_host: "str"
   printer_port: "int(1,65535)"
   printer_queue: "str?"

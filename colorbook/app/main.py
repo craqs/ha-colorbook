@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 
-from flask import Flask, abort, jsonify, render_template, request, send_file, url_for
+from flask import Flask, abort, jsonify, render_template, request, send_file
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from . import history, openai_client
@@ -121,7 +121,7 @@ def create_app() -> Flask:
             png_bytes=png_bytes,
         )
         payload = item.to_dict()
-        payload["image_url"] = url_for("api_history_image", item_id=item.id)
+        payload["image_url"] = f"/api/history/{item.id}/image"
         return jsonify(payload)
 
     @app.get("/api/random-topic")
@@ -180,7 +180,7 @@ def create_app() -> Flask:
         payload = []
         for item in items:
             d = item.to_dict()
-            d["image_url"] = url_for("api_history_image", item_id=item.id)
+            d["image_url"] = f"/api/history/{item.id}/image"
             payload.append(d)
         return jsonify({"items": payload})
 
