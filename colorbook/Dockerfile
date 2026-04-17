@@ -9,26 +9,10 @@ ENV LANG=C.UTF-8 \
 
 WORKDIR /app
 
-# System deps for Pillow wheels on Alpine-based base
-RUN apk add --no-cache \
-        libjpeg-turbo \
-        zlib \
-        freetype \
-        tiff \
-        lcms2 \
-        openjpeg \
-    && apk add --no-cache --virtual .build-deps \
-        build-base \
-        jpeg-dev \
-        zlib-dev \
-        freetype-dev \
-        tiff-dev \
-        lcms2-dev \
-        openjpeg-dev
-
+# Pillow ships pre-built wheels for amd64/aarch64/armv7 on PyPI — no system
+# build deps needed. The base image already provides the required shared libs.
 COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt \
-    && apk del .build-deps
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app/ ./app/
 COPY run.sh /run.sh
