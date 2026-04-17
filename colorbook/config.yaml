@@ -1,5 +1,5 @@
 name: Colorbook
-version: "0.2.4"
+version: "0.2.5"
 slug: colorbook
 description: AI-generated coloring book pages for children, printed on your network printer
 url: https://github.com/craqs/ha-colorbook

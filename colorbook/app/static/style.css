@@ -425,6 +425,15 @@ textarea {
   gap: 10px;
 }
 
+/* Footer */
+.app-footer {
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--muted);
+  opacity: 0.55;
+  padding: 8px 0 calc(16px + env(safe-area-inset-bottom));
+}
+
 /* Toast */
 .toast {
   position: fixed;

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import logging
+import re
 from pathlib import Path
 
 from flask import Flask, abort, jsonify, render_template, request, send_file
@@ -16,6 +17,14 @@ from .pdf import png_to_pdf
 from .prompt import build_prompt
 
 log = logging.getLogger(__name__)
+
+# Read version from config.yaml (single source of truth).
+try:
+    _config_yaml = Path(__file__).parent.parent / "config.yaml"
+    _m = re.search(r'^version:\s*"([^"]+)"', _config_yaml.read_text(), re.MULTILINE)
+    _VERSION = _m.group(1) if _m else "dev"
+except Exception:
+    _VERSION = "dev"
 
 # Content-hash cache-buster so browsers always pick up new JS/CSS after a
 # container rebuild, even when the browser has a 304-cached copy.
@@ -66,6 +75,7 @@ def create_app() -> Flask:
             paper_size=SETTINGS.paper_size,
             language=SETTINGS.language,
             cb=_CB,
+            version=_VERSION,
         )
 
     @app.get("/healthz")
