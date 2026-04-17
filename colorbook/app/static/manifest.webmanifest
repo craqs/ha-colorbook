@@ -1,0 +1,13 @@
+{
+  "name": "Kolorowanki",
+  "short_name": "Kolorowanki",
+  "description": "Generator stron do kolorowania dla dzieci",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f5f4fb",
+  "theme_color": "#6f5af0",
+  "start_url": ".",
+  "scope": ".",
+  "lang": "pl",
+  "icons": []
+}

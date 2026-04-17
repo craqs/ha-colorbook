@@ -1,0 +1,42 @@
+name: Kolorowanki
+version: "0.1.0"
+slug: colorbook
+description: Generator stron do kolorowania dla dzieci z wydrukiem na drukarce sieciowej
+url: https://github.com/craqs/ha-colorbook
+arch:
+  - amd64
+  - aarch64
+  - armv7
+init: false
+startup: application
+boot: auto
+ingress: true
+ingress_port: 8099
+panel_icon: mdi:palette
+panel_title: Kolorowanki
+hassio_api: false
+homeassistant_api: false
+host_network: false
+ports: {}
+options:
+  openai_api_key: ""
+  printer_host: ""
+  printer_port: 631
+  printer_queue: ""
+  paper_size: "A4"
+  image_size: "1024x1536"
+  image_quality: "medium"
+  auto_accept_default: false
+  openai_image_model: "gpt-image-1"
+  openai_chat_model: "gpt-4o-mini"
+schema:
+  openai_api_key: "str?"
+  printer_host: "str"
+  printer_port: "int(1,65535)"
+  printer_queue: "str?"
+  paper_size: "list(A4|Letter)"
+  image_size: "list(1024x1024|1024x1536|1536x1024)"
+  image_quality: "list(low|medium|high|auto)"
+  auto_accept_default: "bool"
+  openai_image_model: "str"
+  openai_chat_model: "str"
