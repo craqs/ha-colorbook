@@ -121,8 +121,8 @@
     previewImage:      $("preview-image"),
     previewOverlay:    $("preview-overlay"),
     overlayText:       $("overlay-text"),
+    promptDetails:     $("prompt-details"),
     promptBox:         $("prompt-box"),
-    btnPromptToggle:   $("btn-prompt-toggle"),
     btnPrint:          $("btn-print"),
     btnRegen:          $("btn-regen"),
     btnRefine:         $("btn-refine"),
@@ -211,9 +211,7 @@
 
     el.preview.hidden = false;
     el.previewImage.removeAttribute("src");
-    el.promptBox.hidden = true;
-    el.btnPromptToggle.setAttribute("aria-expanded", "false");
-    el.btnPromptToggle.textContent = T.showPrompt;
+    el.promptDetails.open = false;
     setOverlay(autoAccept ? T.generatingPrinting : T.generating);
     setBusy(true);
 
@@ -368,22 +366,11 @@
   }
 
   // ---------------------------------------------------------------------------
-  // Prompt toggle
-  // ---------------------------------------------------------------------------
-  function togglePrompt() {
-    const shown = !el.promptBox.hidden;
-    el.promptBox.hidden = shown;
-    el.btnPromptToggle.setAttribute("aria-expanded", String(!shown));
-    el.btnPromptToggle.textContent = shown ? T.showPrompt : T.hidePrompt;
-  }
-
-  // ---------------------------------------------------------------------------
   // Event wiring
   // ---------------------------------------------------------------------------
   el.btnGenerate.addEventListener("click", () => generate());
   el.topic.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); generate(); } });
   el.btnRandom.addEventListener("click", fetchRandomTopic);
-  el.btnPromptToggle.addEventListener("click", togglePrompt);
   el.btnPrint.addEventListener("click", () => { if (state.current) printItem(state.current.id); });
   el.btnRegen.addEventListener("click", () => {
     if (!state.current) return;

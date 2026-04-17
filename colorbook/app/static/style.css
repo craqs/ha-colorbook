@@ -202,17 +202,42 @@ input[type="text"]:focus {
   margin-bottom: 10px;
 }
 .preview-head h2 { font-size: 1.05rem; }
+.prompt-details {
+  margin: 0 0 10px;
+}
+.prompt-details > summary {
+  list-style: none;
+  color: var(--primary);
+  font-size: 0.88rem;
+  cursor: pointer;
+  padding: 2px 0;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.prompt-details > summary::-webkit-details-marker { display: none; }
+.prompt-details > summary::before {
+  content: "▶";
+  font-size: 0.65em;
+  display: inline-block;
+  transition: transform 0.15s;
+}
+.prompt-details[open] > summary::before { transform: rotate(90deg); }
 .prompt-box {
   background: var(--surface-2);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 10px 12px;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
+  font-family: inherit;
+  line-height: 1.5;
   color: var(--muted);
   white-space: pre-wrap;
-  margin: 0 0 10px 0;
-  max-height: 160px;
-  overflow: auto;
+  word-break: break-word;
+  margin: 6px 0 0;
+  max-height: 200px;
+  overflow-y: auto;
 }
 
 .preview-body {

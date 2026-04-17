@@ -53,11 +53,11 @@
     <section class="card preview-card" id="preview" hidden>
       <div class="preview-head">
         <h2 data-i18n="previewTitle">Preview</h2>
-        <button type="button" class="link-btn" id="btn-prompt-toggle" aria-expanded="false" data-i18n="showPrompt">
-          Show prompt
-        </button>
       </div>
-      <pre class="prompt-box" id="prompt-box" hidden></pre>
+      <details class="prompt-details" id="prompt-details">
+        <summary data-i18n="showPrompt">Show prompt</summary>
+        <pre class="prompt-box" id="prompt-box"></pre>
+      </details>
       <div class="preview-body">
         <img id="preview-image" alt="Colorbook page">
         <div class="preview-overlay" id="preview-overlay" hidden>
