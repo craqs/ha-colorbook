@@ -5,7 +5,6 @@ image: ghcr.io/craqs/ha-colorbook-{arch}
 description: AI-generated coloring book pages for children, printed on your network printer
 url: https://github.com/craqs/ha-colorbook
 arch:
-  - amd64
   - aarch64
 init: false
 startup: application
