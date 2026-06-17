@@ -1,6 +1,7 @@
 name: Colorbook
 version: "0.2.5"
 slug: colorbook
+image: ghcr.io/craqs/ha-colorbook-{arch}
 description: AI-generated coloring book pages for children, printed on your network printer
 url: https://github.com/craqs/ha-colorbook
 arch:
