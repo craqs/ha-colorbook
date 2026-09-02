@@ -1,4 +1,4 @@
-# 🎨 Kolorowanki — Home Assistant Add-on
+# 🎨 Kolorowanki - Home Assistant Add-on
 
 > AI-generated coloring book pages for children, printed on your network printer.
 
@@ -14,12 +14,12 @@ on your Brother (or any AirPrint-capable) network printer.
 
 **Features**
 
-- 🖼 AI-generated line-art via **OpenAI `gpt-image-1`** — thick outlines, white
+- 🖼 AI-generated line-art via **OpenAI `gpt-image-1`** - thick outlines, white
   background, sized for little hands
-- 🖨 Prints directly to a network printer (IPP / AirPrint) — auto-discovers
+- 🖨 Prints directly to a network printer (IPP / AirPrint) - auto-discovers
   the right queue, no CUPS config needed
 - 🎲 **Random topic** button (Polish, child-friendly)
-- ✅ **Auto-print** toggle — type topic → done, page comes out of the printer
+- ✅ **Auto-print** toggle - type topic → done, page comes out of the printer
 - ✏️ **Refine** the image with follow-up prompts, or regenerate from scratch
 - 🗂 **Gallery** of all generated pages with reprint & delete
 - 📱 Mobile-friendly (iPhone-optimised), dark mode, works via HA Ingress
@@ -30,7 +30,7 @@ on your Brother (or any AirPrint-capable) network printer.
 
 ### One-click (recommended)
 
-Click the button above — it opens the **Add repository** dialog in your
+Click the button above - it opens the **Add repository** dialog in your
 Home Assistant instance with the URL pre-filled.
 
 ### Manual
@@ -46,7 +46,7 @@ Home Assistant instance with the URL pre-filled.
 
 | Option | Default | Description |
 |---|---|---|
-| `openai_api_key` | *(env OPENAI_TOKEN)* | OpenAI API key — leave blank if already set as an env var |
+| `openai_api_key` | *(env OPENAI_TOKEN)* | OpenAI API key - leave blank if already set as an env var |
 | `printer_host` | *(required)* | Hostname or IP of the printer / AirPrint server (e.g. `BRN001122.local`) |
 | `printer_port` | `631` | IPP port |
 | `printer_queue` | *(auto-discover)* | IPP queue path (e.g. `printers/Brother`). Leave blank to auto-detect from CUPS |
